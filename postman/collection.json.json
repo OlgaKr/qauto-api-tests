@@ -1,0 +1,1041 @@
+{
+	"info": {
+		"_postman_id": "85332e6a-b084-4f50-85fb-cc5a10922bdc",
+		"name": "QA Auto API (15.1) - Olga Kravchenko",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50460594",
+		"_collection_link": "https://ellagreen200-2914380.postman.co/workspace/dae1c0da-f688-4e7e-812f-7f29996fe26c/collection/50460594-85332e6a-b084-4f50-85fb-cc5a10922bdc?action=share&source=collection_link&creator=50460594"
+	},
+	"item": [
+		{
+			"name": "Signup negative – password",
+			"item": [
+				{
+					"name": "Signup negative – password (all cases)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const baseUrl = pm.environment.get(\"baseUrl\");\r",
+									"\r",
+									"const cases = [\r",
+									"    {\r",
+									"        id: \"NT1: Password too short\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",\r",
+									"        password: \"Ab1!\",\r",
+									"        repeatPassword: \"Ab1!\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"Password has to be \"\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"NT2: Without Capital Letter\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",   \r",
+									"        password: \"qwerty123!\",\r",
+									"        repeatPassword: \"qwerty123!\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"Password has to be \"\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"NT3: Without Small Letter\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",\r",
+									"        password: \"QWERTY123!\",\r",
+									"        repeatPassword: \"QWERTY123!\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"Password has to be \"\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"NT4: Password too long\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",\r",
+									"        password: \"Qwerty1234567890\",\r",
+									"        repeatPassword: \"Qwerty1234567890\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"Password has to be \"\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"NT5: Empty Password\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",\r",
+									"        password: \"\",\r",
+									"        repeatPassword: \"\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"empty\"\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"NT6: Passwords do not match\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",\r",
+									"        password: \"Qwerty123!\",\r",
+									"        repeatPassword: \"Qwerty123!4\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"Passwords do not match\"\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"NT7: Without Integer\",\r",
+									"        name: \"Olya\",\r",
+									"        lastName: \"Tester\",\r",
+									"        password: \"Abcdefgh\",\r",
+									"        repeatPassword: \"Abcdefgh\",\r",
+									"        expectedStatus: 400,\r",
+									"        expectedMessagePart: \"Password has to be \"\r",
+									"    }\r",
+									"];\r",
+									"    cases.forEach((testCase, index) => {\r",
+									"    const ts = Date.now();\r",
+									"    const email = `test_user_${ts}_${index}@test.com`;\r",
+									"\r",
+									"    const requestBody = {\r",
+									"        name: testCase.name,\r",
+									"        lastName: testCase.lastName,\r",
+									"        email,\r",
+									"        password: testCase.password,\r",
+									"        repeatPassword: testCase.repeatPassword\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(\r",
+									"        {\r",
+									"        url: `${baseUrl}/api/auth/signup`,\r",
+									"        method: \"POST\",\r",
+									"        header: {\"Content-Type\": \"application/json\"},\r",
+									"        body: {mode: \"raw\", raw: JSON.stringify(requestBody)}\r",
+									"        }, \r",
+									"\r",
+									"    (error, result) => {\r",
+									"        const title = `[${testCase.id}]`;\r",
+									"\r",
+									"        pm.test(`${title} status code is ${testCase.expectedStatus}`, function () {\r",
+									"            pm.expect(result.code).to.eql(testCase.expectedStatus);\r",
+									"        });\r",
+									"\r",
+									"        let body = result.json();\r",
+									"     \r",
+									"        pm.test(`${title} status is \"error\"`, function () {\r",
+									"            pm.expect(body.status).to.eql(\"error\");\r",
+									"        });\r",
+									"\r",
+									"        pm.test(`${title} message contains expected part`, function () {\r",
+									"            pm.expect(body).to.have.property(\"message\");\r",
+									"            pm.expect(body.message).to.be.a(\"string\").and.not.empty;\r",
+									"            pm.expect(body.message).to.include(testCase.expectedMessagePart);\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Dummy\",\r\n  \"lastName\": \"Dummy\",\r\n  \"email\": \"dummy@test.com\",\r\n  \"password\": \"Dummy123!\",\r\n  \"repeatPassword\": \"Dummy123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "User Profile (all cases)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const baseUrl = pm.environment.get(\"baseUrl\");\r",
+									"const cases = [\r",
+									"    {\r",
+									"        id: \"UP1: dateBirth not a date\",\r",
+									"        body: {\r",
+									"            name: \"Olya\",\r",
+									"            lastName: \"Tester\",\r",
+									"            photoFilename: \"user-123.jpg\",\r",
+									"            dateBirth: \"Not a date\",\r",
+									"            country: \"Czech Republic\"\r",
+									"        },\r",
+									"        expectedStatus: 500\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"UP2: country is an object\",\r",
+									"        body: {\r",
+									"            name: \"12345\",\r",
+									"            lastName: \"23456\",\r",
+									"            photoFilename: \"9007199254740991453535\",\r",
+									"            dateBirth: \"2021-03-17T15:21:05.000Z\",\r",
+									"            country: {\r",
+									"                name: \"Olya\",\r",
+									"                age: 30\r",
+									"            }\r",
+									"        },\r",
+									"        expectedStatus: 500\r",
+									"    },\r",
+									"    {\r",
+									"        id: \"UP3: valid update\",\r",
+									"        body: {\r",
+									"            name: \"OlyaUpdated\",\r",
+									"            lastName: \"TesterUpdated\",\r",
+									"            photoFilename: \"user-123.jpg\",\r",
+									"            dateBirth: \"1995-03-21T10:00:00.000Z\",\r",
+									"            country: \"Ukraine\"\r",
+									"        },\r",
+									"        expectedStatus: 200\r",
+									"    }\r",
+									"];\r",
+									"\r",
+									"cases.forEach((testCase) => {\r",
+									"\r",
+									"    const title = `[${testCase.id}]`;\r",
+									"\r",
+									"    pm.sendRequest(\r",
+									"        {\r",
+									"            url: `${baseUrl}/api/users/profile`,\r",
+									"            method: \"PUT\",\r",
+									"            header: {\r",
+									"                \"Content-Type\": \"application/json\"\r",
+									"            },\r",
+									"            body: {\r",
+									"                mode: \"raw\",\r",
+									"                raw: JSON.stringify(testCase.body)\r",
+									"            }\r",
+									"        },\r",
+									"\r",
+									"        (error, result) => {\r",
+									"\r",
+									"            pm.test(`${title} status code is ${testCase.expectedStatus}`, function () {\r",
+									"                pm.expect(result.code).to.eql(testCase.expectedStatus);\r",
+									"            });\r",
+									"\r",
+									"            let body = result.json();\r",
+									"\r",
+									"            if (testCase.expectedStatus === 500) {\r",
+									"                pm.test(`${title} response status = \"error\"`, function () {\r",
+									"                    pm.expect(body.status).to.eql(\"error\");\r",
+									"                });\r",
+									"\r",
+									"                pm.test(`${title} message exists`, function () {\r",
+									"                    pm.expect(body.message).to.be.a(\"string\").and.not.empty;\r",
+									"                });\r",
+									"            }\r",
+									"\r",
+									"            if (testCase.expectedStatus === 200) {\r",
+									"                pm.test(`${title} profile updated`, function () {\r",
+									"                    pm.expect(body.status).to.eql(\"ok\");\r",
+									"                });\r",
+									"\r",
+									"                pm.test(`${title} correct fields returned`, function () {\r",
+									"                    pm.expect(body.data.name).to.be.a(\"string\");\r",
+									"                    pm.expect(body.data.lastName).to.be.a(\"string\");\r",
+									"                    pm.expect(body.data.country).to.be.a(\"string\");\r",
+									"                    pm.expect(body.data.photoFilename).to.be.a(\"string\");\r",
+									"                    pm.expect(body.data.userId).to.be.a(\"number\");\r",
+									"                    pm.expect(body.data.dateBirth).to.be.a(\"string\");\r",
+									"                });\r",
+									"            }\r",
+									"        });\r",
+									"});\r",
+									"\r",
+									"pm.sendRequest(\r",
+									"    {\r",
+									"        url: `${baseUrl}/api/users`, \r",
+									"        method: \"DELETE\"\r",
+									"    },\r",
+									"    (error, result) => {\r",
+									"        console.log(\"User deleted:\", result.code);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const baseUrl = pm.environment.get(\"baseUrl\");\r",
+									"const ts = Date.now();\r",
+									"const email = `test_user_${ts}@test.com`;\r",
+									"const password = \"Qwerty123!\";\r",
+									"\r",
+									"pm.sendRequest(\r",
+									"    {\r",
+									"        url: `${baseUrl}/api/auth/signup`,\r",
+									"        method: \"POST\",\r",
+									"        header: {\r",
+									"            \"Content-Type\": \"application/json\"\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: \"raw\",\r",
+									"            raw: JSON.stringify({\r",
+									"                name: \"Olya\",\r",
+									"                lastName: \"Tester\",\r",
+									"                email: email,\r",
+									"                password: password,\r",
+									"                repeatPassword: password\r",
+									"            })\r",
+									"        }\r",
+									"    },\r",
+									"    \r",
+									"    (error, result) => {\r",
+									"        console.log(\"Sign up status:\", result.code);\r",
+									"    }\r",
+									");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"photoFilename\": \"user-1764622518486.jpg\",\r\n  \"name\": \"OlgaUpdated\",\r\n  \"lastName\": \"TesterUpdated\",\r\n  \"dateBirth\": \"Not a date\",\r\n  \"country\": \"Czech Republic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "R1: Create user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const ts = Date.now();\r",
+							"pm.environment.set(\"userEmail\", `test_user_${ts}@test.com`);\r",
+							"pm.environment.set(\"userPassword\", \"Qwerty123!\");\r",
+							"\r",
+							"pm.test(\"Email has valid format\", function () {\r",
+							"    const email = pm.environment.get(\"userEmail\");\r",
+							"    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r",
+							"    pm.expect(email).to.match(emailRegex);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User created successfully\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"status\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"data\": {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"userId\": {\r",
+							"          \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"photoFilename\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"distanceUnits\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"currency\": {\r",
+							"          \"type\": \"string\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"userId\",\r",
+							"        \"photoFilename\",\r",
+							"        \"distanceUnits\",\r",
+							"        \"currency\"\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"status\",\r",
+							"    \"data\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response matches JSON schema\", function () {\r",
+							"    pm.response.to.have.jsonSchema(schema);});\r",
+							"\r",
+							"const createdUserId = Number(body.data.userId);\r",
+							"pm.environment.set(\"createdUserId\", createdUserId);\r",
+							"console.log(\"createdUserId:\", createdUserId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Olga\",\r\n  \"lastName\": \"Tester\",\r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"{{userPassword}}\",\r\n  \"repeatPassword\": \"{{userPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R2: Update profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Profile updated successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"const requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Name matches request\", function () {\r",
+							"    pm.expect(body.data.name).to.eql(requestBody.name);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Last name matches request\", function () {\r",
+							"    pm.expect(body.data.lastName).to.eql(requestBody.lastName);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Country matches request\", function () {\r",
+							"    pm.expect(body.data.country).to.eql(requestBody.country);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"dateBirth matches request\", function () {\r",
+							"    pm.expect(body.data.dateBirth).to.eql(requestBody.dateBirth);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"photoFilename\": \"user-1764622518486.jpg\",\r\n  \"name\": \"OlgaUpdated\",\r\n  \"lastName\": \"TesterUpdated\",\r\n  \"dateBirth\": \"1995-07-21T10:00:00.000Z\",\r\n  \"country\": \"Ukraine\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R3: Change password",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"newUserPassword\", \"NewQwerty1234!\");"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User created successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 200) {\r",
+							"    pm.environment.set(\"userPassword\", pm.environment.get(\"newUserPassword\"));\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Password changed for the same user\", function () {\r",
+							"    const createdUserId = Number(pm.environment.get(\"createdUserId\"));\r",
+							"    const responseUserId = body.data.userId;\r",
+							"    console.log(\"createdUserId:\", createdUserId);\r",
+							"    console.log(\"responseUserId:\", responseUserId);\r",
+							"    pm.expect(responseUserId).to.eql(createdUserId);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"oldPassword\": \"{{userPassword}}\",\r\n  \"password\": \"{{newUserPassword}}\",\r\n  \"repeatPassword\": \"{{newUserPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R4: Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Logout successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R5: Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login successful\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Password changed for the same user\", function () {\r",
+							"    const createdUserId = Number(pm.environment.get(\"createdUserId\"));\r",
+							"    const responseUserId = body.data.userId;\r",
+							"    console.log(\"createdUserId:\", createdUserId);\r",
+							"    console.log(\"responseUserId:\", responseUserId);\r",
+							"    pm.expect(responseUserId).to.eql(createdUserId);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{userEmail}}\",\r\n  \"password\": \"{{userPassword}}\",\r\n  \"remember\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R6: Add car",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Car created successfully\", function () {\r",
+							"    pm.response.to.have.status(201);   \r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"carId\", body.data.id);\r",
+							"pm.environment.set(\"mileage\", body.data.mileage);\r",
+							"pm.environment.set(\"carCreatedDate\", body.data.carCreatedAt.slice(0, 10));\r",
+							"\r",
+							"const carSchema = {\r",
+							"    type: \"object\",\r",
+							"    required: [\"status\", \"data\"],\r",
+							"    properties: {\r",
+							"        status: { type: \"string\" },\r",
+							"        data: {\r",
+							"            type: \"object\",\r",
+							"            required: [\"id\", \"carBrandId\", \"carModelId\", \"mileage\", \"carCreatedAt\"],\r",
+							"            properties: {\r",
+							"                id:          { type: \"number\" },\r",
+							"                carBrandId:  { type: \"number\" },\r",
+							"                carModelId:  { type: \"number\" },\r",
+							"                mileage:     { type: \"number\" },\r",
+							"                carCreatedAt:{ type: \"string\" }\r",
+							"            }\r",
+							"        }\r",
+							"    }\r",
+							"};\r",
+							"\r",
+							"pm.test(\"Car response matches JSON schema\", function () {\r",
+							"    pm.response.to.have.jsonSchema(carSchema);\r",
+							"});\r",
+							"\r",
+							"const requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Car brand matches request\", function () {\r",
+							"    pm.expect(body.data.carBrandId).to.eql(requestBody.carBrandId);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Car model matches request\", function () {\r",
+							"    pm.expect(body.data.carModelId).to.eql(requestBody.carModelId);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mileage matches request\", function () {\r",
+							"    pm.expect(body.data.mileage).to.eql(requestBody.mileage);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carBrandId\": 1,\r\n  \"carModelId\": 1,\r\n  \"mileage\": 122\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/cars",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R7: Add expense",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Expense added successfully\", function () {\r",
+							"    pm.response.to.have.status(200);   \r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Mileage is greater than previous\", function () {\r",
+							"    const prev = Number(pm.environment.get(\"mileage\"));\r",
+							"    const current = Number(pm.environment.get(\"newMileage\"));\r",
+							"    pm.expect(current).to.be.above(prev);\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"mileage\", Number(pm.environment.get(\"newMileage\")));\r",
+							"\r",
+							"//Півторюємо тест 3 рази, якщо запускаємо через раннер, щоб і тут перевірялось, що кожного разу значення витрат є більшим за попереднє.\r",
+							"const maxRepeats = 3;\r",
+							"let currentRepeat = Number(pm.environment.get(\"expenseRepeat\")) || 1;\r",
+							"\r",
+							"console.log(\"R7: Add expense - СurrentRepeat:\", currentRepeat);\r",
+							"\r",
+							"if (currentRepeat < maxRepeats) {\r",
+							"    currentRepeat += 1;\r",
+							"    pm.environment.set(\"expenseRepeat\", currentRepeat);\r",
+							"    pm.execution.setNextRequest(\"R7: Add expense\");\r",
+							"} else {\r",
+							"    pm.environment.unset(\"expenseRepeat\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"newMileage\", Number(pm.environment.get(\"mileage\")) + 1);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carId\": {{carId}},\r\n  \"reportedAt\": \"{{carCreatedDate}}\",\r\n  \"mileage\": {{newMileage}},\r\n  \"liters\": 1,\r\n  \"totalCost\": 1,\r\n  \"forceMileage\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/expenses",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"expenses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "R8: Delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"User deleted successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const body = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status is ok\", function () {\r",
+							"    pm.expect(body.status).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"//Це мені підказали :) \r",
+					"let baseUrl = pm.environment.get(\"baseUrl\");\r",
+					"\r",
+					"try {\r",
+					"    const fromFile = pm.iterationData.get(\"baseUrl\");\r",
+					"    if (fromFile) {\r",
+					"        baseUrl = fromFile;\r",
+					"    }\r",
+					"} catch (error) {\r",
+					"}\r",
+					"\r",
+					"if (!baseUrl) {\r",
+					"    throw new Error(\"baseUrl is not defined in environment or data file\");\r",
+					"}\r",
+					"\r",
+					"pm.environment.set(\"baseUrl\", baseUrl);\r",
+					"console.log(\"Collection uses baseUrl:\", baseUrl);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

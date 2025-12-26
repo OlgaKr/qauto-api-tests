@@ -1,0 +1,16 @@
+{
+	"id": "8c9b41d1-e043-4106-8330-0f5b14e76fa1",
+	"name": "Development",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-12-07T19:12:14.061Z",
+	"_postman_exported_using": "Postman/11.74.5"
+}
